@@ -115,9 +115,9 @@ fun Localizacao(){
         Text("LOCALIZAÇÃO", fontSize = 11.sp, color = Color.Gray, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(6.dp))
         Text("Rua das Acácias, 248 – Centro", fontSize = 13.sp, color = Color(0xFF1B3A6B))
-        Text("São Paulo – SP, 01310-100", fontSize = 13.sp, color = Color(0xFF1B3A6B))
+        Text("Curitiva – PR, 01310-100", fontSize = 13.sp, color = Color(0xFF1B3A6B))
         Spacer(modifier = Modifier.height(4.dp))
-        Text("(11) 3456-7890", fontSize = 13.sp, color = Terracotta, fontWeight = FontWeight.Bold)
+        Text("(41) 3456-7890", fontSize = 13.sp, color = Terracotta, fontWeight = FontWeight.Bold)
     }
 }
 
