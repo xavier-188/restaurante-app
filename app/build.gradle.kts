@@ -2,6 +2,7 @@
     plugins {
         alias(libs.plugins.android.application)
         alias(libs.plugins.kotlin.compose)
+        alias(libs.plugins.kotlin.serialization)
     }
 
 
@@ -50,6 +51,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    implementation("androidx.navigation:navigation-compose:2.8.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.+")
 
     testImplementation(libs.junit)
 
