@@ -15,6 +15,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.restauranteapp.ui.screens.*
 import com.example.restauranteapp.ui.theme.RestauranteAppTheme
 import com.seupacote.restauranteapp.ui.screens.HomeScreen
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
+import com.example.restauranteapp.ui.theme.Terracotta
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

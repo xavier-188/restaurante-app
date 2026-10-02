@@ -41,29 +41,7 @@ fun TelaReservas() {
                 )
             }
         },
-        bottomBar = {
-            // Barra inferior estruturada com Row para alinhar os itens horizontalmente
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Início", fontSize = 12.sp, color = Color.Gray)
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Cardápio", fontSize = 12.sp, color = Color.Gray)
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Reservas", fontSize = 12.sp, color = Terracotta, fontWeight = FontWeight.Bold)
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Sobre", fontSize = 12.sp, color = Color.Gray)
-                }
-            }
-        }
+
     ) { innerPadding ->
         // Estrutura principal utilizando Column para empilhar os elementos do formulário
         Column(

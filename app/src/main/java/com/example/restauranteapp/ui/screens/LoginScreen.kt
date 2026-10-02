@@ -48,7 +48,8 @@ fun LoginScreen(
 
         Button(
             onClick = onLoginSuccess,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+
         ) {
             Text("Entrar")
         }

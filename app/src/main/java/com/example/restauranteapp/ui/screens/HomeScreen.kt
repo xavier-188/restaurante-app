@@ -30,20 +30,7 @@ fun HomeScreen() {
                 Text("Início", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             }
         },
-        bottomBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Text("Início", fontSize = 11.sp, color = Terracotta)
-                Text("Cardápio", fontSize = 11.sp, color = Color.Gray)
-                Text("Reservas", fontSize = 11.sp, color = Color.Gray)
-                Text("Sobre", fontSize = 11.sp, color = Color.Gray)
 
-            }
-        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
