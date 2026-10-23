@@ -1,4 +1,4 @@
-package com.example.restauranteapp.navigation
+package com.example.restauranteapp.ui.navigation
 
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -11,31 +11,44 @@ fun BottomMenu(
     navController: NavHostController,
     currentRoute: String?
 ) {
+    // Navega para uma aba sem empilhar cópias: volta até a Home e abre a rota (uma só vez)
+    fun irPara(rota: String) {
+        navController.navigate(rota) {
+            popUpTo(Routes.HOME)
+            launchSingleTop = true
+        }
+    }
+
     NavigationBar {
         NavigationBarItem(
             selected = currentRoute == Routes.HOME,
-            onClick = { navController.navigate(Routes.HOME) },
+            onClick = { irPara(Routes.HOME) },
             label = { Text("Início") },
             icon = { Text("🏠") }
         )
         NavigationBarItem(
             selected = currentRoute == Routes.CARDAPIO,
-            onClick = { navController.navigate(Routes.CARDAPIO) },
+            onClick = { irPara(Routes.CARDAPIO) },
             label = { Text("Cardápio") },
             icon = { Text("🍽️") }
         )
         NavigationBarItem(
             selected = currentRoute == Routes.RESERVAS,
-            onClick = { navController.navigate(Routes.RESERVAS) },
+            onClick = { irPara(Routes.RESERVAS) },
             label = { Text("Reservas") },
-            icon = { Text("🍽️") }
+            icon = { Text("📅") }
         )
         NavigationBarItem(
             selected = currentRoute == Routes.SOBRE,
-            onClick = { navController.navigate(Routes.SOBRE) },
+            onClick = { irPara(Routes.SOBRE) },
             label = { Text("Sobre") },
-            icon = { Text("🍽️") }
+            icon = { Text("ℹ️") }
         )
-
+        NavigationBarItem(
+            selected = currentRoute == Routes.CONFIG,
+            onClick = { irPara(Routes.CONFIG) },
+            label = { Text("Config") },
+            icon = { Text("⚙️") }
+        )
     }
 }

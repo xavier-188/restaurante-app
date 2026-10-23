@@ -1,4 +1,4 @@
-package com.seupacote.restauranteapp.ui.screens
+package com.example.restauranteapp.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

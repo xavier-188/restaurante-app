@@ -1,4 +1,4 @@
-package com.example.restauranteapp.data
+package com.example.restauranteapp.data.model
 
 data class Reserva(
     val id: Int = 0,
@@ -7,5 +7,6 @@ data class Reserva(
     val data: String,
     val hora: String,
     val pessoas: Int,
+    val observacoes: String = "",
     val usuarioId: Int? = null
 )

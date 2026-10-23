@@ -1,4 +1,4 @@
-package com.example.restauranteapp.navigation
+package com.example.restauranteapp.ui.navigation
 
 object Routes {
     const val LOGIN = "login"
@@ -7,4 +7,5 @@ object Routes {
     const val CARDAPIO = "cardapio"
     const val RESERVAS = "reservas"
     const val SOBRE = "sobre"
+    const val CONFIG = "config"
 }

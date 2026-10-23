@@ -1,6 +1,8 @@
-package com.example.restauranteapp.data
+package com.example.restauranteapp.repository
 
 import android.content.ContentValues
+import com.example.restauranteapp.data.local.DatabaseHelper
+import com.example.restauranteapp.data.model.Reserva
 
 class ReservaRepository(private val helper: DatabaseHelper) {
 
@@ -10,10 +12,13 @@ class ReservaRepository(private val helper: DatabaseHelper) {
         )
     }
 
-    fun listar(): List<Reserva> {
+    // Lista só as reservas do usuário logado (mais recentes primeiro)
+    fun listar(usuarioId: Int): List<Reserva> {
         val lista = mutableListOf<Reserva>()
         val cursor = helper.readableDatabase.query(
-            DatabaseHelper.TABELA_RESERVAS, null, null, null, null, null,
+            DatabaseHelper.TABELA_RESERVAS, null,
+            "${DatabaseHelper.COL_RESERVA_USUARIO_ID} = ?", arrayOf(usuarioId.toString()),
+            null, null,
             "${DatabaseHelper.COL_RESERVA_ID} DESC"
         )
         cursor.use {
@@ -27,6 +32,7 @@ class ReservaRepository(private val helper: DatabaseHelper) {
                         data = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COL_RESERVA_DATA)),
                         hora = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COL_RESERVA_HORA)),
                         pessoas = it.getInt(it.getColumnIndexOrThrow(DatabaseHelper.COL_RESERVA_PESSOAS)),
+                        observacoes = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COL_RESERVA_OBSERVACOES)),
                         usuarioId = if (it.isNull(usuarioIdIndex)) null else it.getInt(usuarioIdIndex)
                     )
                 )
@@ -59,6 +65,7 @@ class ReservaRepository(private val helper: DatabaseHelper) {
         values.put(DatabaseHelper.COL_RESERVA_DATA, reserva.data)
         values.put(DatabaseHelper.COL_RESERVA_HORA, reserva.hora)
         values.put(DatabaseHelper.COL_RESERVA_PESSOAS, reserva.pessoas)
+        values.put(DatabaseHelper.COL_RESERVA_OBSERVACOES, reserva.observacoes)
         values.put(DatabaseHelper.COL_RESERVA_USUARIO_ID, reserva.usuarioId)
         return values
     }

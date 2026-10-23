@@ -1,4 +1,4 @@
-package com.example.restauranteapp.data
+package com.example.restauranteapp.data.local
 
 import android.content.ContentValues
 import android.content.Context
@@ -10,7 +10,7 @@ class DatabaseHelper(context: Context) :
 
     companion object {
         const val DATABASE_NAME = "restaurante.db"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
 
         // Tabela usuarios
         const val TABELA_USUARIOS = "usuarios"
@@ -41,6 +41,7 @@ class DatabaseHelper(context: Context) :
         const val COL_RESERVA_DATA = "data"
         const val COL_RESERVA_HORA = "hora"
         const val COL_RESERVA_PESSOAS = "pessoas"
+        const val COL_RESERVA_OBSERVACOES = "observacoes"
         const val COL_RESERVA_USUARIO_ID = "usuario_id"
     }
 
@@ -88,6 +89,7 @@ class DatabaseHelper(context: Context) :
                 $COL_RESERVA_DATA TEXT NOT NULL,
                 $COL_RESERVA_HORA TEXT NOT NULL,
                 $COL_RESERVA_PESSOAS INTEGER NOT NULL,
+                $COL_RESERVA_OBSERVACOES TEXT NOT NULL DEFAULT '',
                 $COL_RESERVA_USUARIO_ID INTEGER
             )
             """.trimIndent()
@@ -97,6 +99,9 @@ class DatabaseHelper(context: Context) :
         inserirPrato(db, "Filé à Parmegiana", "Filé empanado, molho de tomate, queijo gratinado e arroz com fritas.", 52.0, "Pratos", "🥩")
         inserirPrato(db, "Risoto de Camarão", "Arroz arbóreo cremoso com camarões salteados e ervas frescas.", 68.0, "Pratos", "🍤")
         inserirPrato(db, "Frango Grelhado", "Peito de frango grelhado, ervas finas e limão siciliano.", 44.0, "Pratos", "🍗")
+        inserirPrato(db, "Hambúrguer Bella", "Pão brioche, hambúrguer artesanal, queijo, salada e molho da casa.", 38.0, "Lanches", "🍔")
+        inserirPrato(db, "Bruschetta Italiana", "Pão italiano tostado, tomate, manjericão e azeite extravirgem.", 26.0, "Entradas", "🍅")
+        inserirPrato(db, "Pudim da Casa", "Pudim cremoso de leite condensado com calda de caramelo.", 18.0, "Sobremesas", "🍮")
     }
 
     // Chamado quando DATABASE_VERSION aumenta: apaga tudo e recria (simples, mas perde os dados)
