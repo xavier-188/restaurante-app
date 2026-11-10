@@ -2,6 +2,7 @@
     plugins {
         alias(libs.plugins.android.application)
         alias(libs.plugins.kotlin.compose)
+        alias(libs.plugins.kotlin.serialization)
     }
 
 
@@ -51,6 +52,14 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
     implementation("androidx.navigation:navigation-compose:2.8.9")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
+
+    // Rotas serializadas (navegação type-safe)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    // Retrofit para consumir a API
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
     testImplementation(libs.junit)
 

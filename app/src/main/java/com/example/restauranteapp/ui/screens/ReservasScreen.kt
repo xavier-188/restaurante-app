@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.restauranteapp.data.model.Reserva
 import com.example.restauranteapp.ui.theme.RestauranteAppTheme
 import com.example.restauranteapp.ui.theme.Terracotta
@@ -23,8 +24,8 @@ import com.example.restauranteapp.ui.viewmodel.ReservaViewModel
 // Parte "conectada": fala com o ViewModel
 @Composable
 fun TelaReservas(
-    reservaViewModel: ReservaViewModel,
-    usuarioId: Int
+    usuarioId: Int,
+    reservaViewModel: ReservaViewModel = viewModel()
 ) {
     // Carrega as reservas do usuário quando a tela abre (e de novo se o usuário mudar)
     LaunchedEffect(usuarioId) {

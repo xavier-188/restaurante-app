@@ -3,14 +3,19 @@ package com.example.restauranteapp.ui.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import com.example.restauranteapp.data.model.Usuario
-import com.example.restauranteapp.repository.UsuarioRepository
+import com.example.restauranteapp.data.dao.UsuarioDao
+import com.example.restauranteapp.data.local.DatabaseHelper
 import java.security.MessageDigest
 
-class AuthViewModel(private val repository: UsuarioRepository) : ViewModel() {
+// AndroidViewModel recebe o application, usado para abrir o banco e criar o DAO (igual ao exemplo da aula)
+class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
-    var usuarioLogado by mutableStateOf<Usuario?>(repository.buscarUsuarioDaSessao())
+    private val dao = UsuarioDao(DatabaseHelper(application))
+
+    var usuarioLogado by mutableStateOf<Usuario?>(dao.buscarUsuarioDaSessao())
         private set
 
     var erro by mutableStateOf<String?>(null)
@@ -28,13 +33,13 @@ class AuthViewModel(private val repository: UsuarioRepository) : ViewModel() {
             return
         }
 
-        val usuario = repository.buscarPorEmail(emailLimpo)
+        val usuario = dao.buscarPorEmail(emailLimpo)
         if (usuario == null || usuario.senha != gerarHash(senha)) {
             erro = "E-mail ou senha incorretos."
             return
         }
 
-        repository.salvarSessao(usuario.id)
+        dao.salvarSessao(usuario.id)
         erro = null
         usuarioLogado = usuario
     }
@@ -59,25 +64,25 @@ class AuthViewModel(private val repository: UsuarioRepository) : ViewModel() {
             erro = "As senhas não conferem."
             return
         }
-        if (repository.buscarPorEmail(emailLimpo) != null) {
+        if (dao.buscarPorEmail(emailLimpo) != null) {
             erro = "Já existe uma conta com esse e-mail."
             return
         }
 
         val novo = Usuario(nome = nomeLimpo, email = emailLimpo, senha = gerarHash(senha))
-        val id = repository.inserir(novo)
+        val id = dao.inserir(novo)
         if (id == -1L) {
             erro = "Não foi possível cadastrar. Tente novamente."
             return
         }
 
-        repository.salvarSessao(id.toInt())
+        dao.salvarSessao(id.toInt())
         erro = null
         usuarioLogado = novo.copy(id = id.toInt())
     }
 
     fun logout() {
-        repository.encerrarSessao()
+        dao.encerrarSessao()
         usuarioLogado = null
     }
 

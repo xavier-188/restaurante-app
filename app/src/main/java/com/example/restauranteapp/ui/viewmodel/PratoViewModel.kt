@@ -1,19 +1,26 @@
 package com.example.restauranteapp.ui.viewmodel
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.example.restauranteapp.data.ImagemConversor
 import com.example.restauranteapp.data.model.Prato
-import com.example.restauranteapp.repository.PratoRepository
+import com.example.restauranteapp.data.dao.PratoDao
+import com.example.restauranteapp.data.local.DatabaseHelper
 
-class PratoViewModel(private val repository: PratoRepository) : ViewModel() {
+// AndroidViewModel recebe o application, usado para abrir o banco e criar o DAO (igual ao exemplo da aula)
+class PratoViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val dao = PratoDao(DatabaseHelper(application))
 
     var pratos by mutableStateOf(emptyList<Prato>())
         private set
 
     fun carregar() {
-        pratos = repository.listar()
+        pratos = dao.listar()
     }
 
     // Retorna a mensagem de erro, ou null se salvou com sucesso.
@@ -24,7 +31,8 @@ class PratoViewModel(private val repository: PratoRepository) : ViewModel() {
         descricao: String,
         preco: String,
         categoria: String,
-        emoji: String
+        emoji: String,
+        fotoNova: Bitmap? // foto tirada agora com a câmera (null = manter a que já tinha)
     ): String? {
         val valor = preco.trim().replace(",", ".").toDoubleOrNull()
         if (nome.isBlank() || categoria.isBlank()) {
@@ -34,26 +42,34 @@ class PratoViewModel(private val repository: PratoRepository) : ViewModel() {
             return "Informe um preço válido (ex: 25,90)."
         }
 
+        // Se tirou foto nova, converte para bytes (BLOB); senão mantém a foto que o prato já tinha
+        val foto = if (fotoNova != null) {
+            ImagemConversor.paraBlob(fotoNova)
+        } else {
+            pratos.find { it.id == id }?.foto
+        }
+
         val prato = Prato(
             id = id ?: 0,
             nome = nome.trim(),
             descricao = descricao.trim(),
             preco = valor,
             categoria = categoria,
-            emoji = emoji.trim().ifEmpty { "🍽️" }
+            emoji = emoji.trim().ifEmpty { "🍽️" },
+            foto = foto
         )
 
         if (id == null) {
-            repository.inserir(prato)
+            dao.inserir(prato)
         } else {
-            repository.atualizar(prato)
+            dao.atualizar(prato)
         }
         carregar()
         return null
     }
 
     fun excluir(id: Int) {
-        repository.excluir(id)
+        dao.excluir(id)
         carregar()
     }
 }

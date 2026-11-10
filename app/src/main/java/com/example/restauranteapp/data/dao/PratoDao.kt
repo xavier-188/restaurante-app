@@ -1,10 +1,11 @@
-package com.example.restauranteapp.repository
+package com.example.restauranteapp.data.dao
 
 import android.content.ContentValues
 import com.example.restauranteapp.data.local.DatabaseHelper
 import com.example.restauranteapp.data.model.Prato
 
-class PratoRepository(private val helper: DatabaseHelper) {
+// DAO (Data Access Object): concentra todo o SQL da tabela "pratos" (CRUD)
+class PratoDao(private val helper: DatabaseHelper) {
 
     // CREATE
     fun inserir(prato: Prato): Long {
@@ -22,6 +23,7 @@ class PratoRepository(private val helper: DatabaseHelper) {
         )
         cursor.use {
             while (it.moveToNext()) {
+                val fotoIndex = it.getColumnIndexOrThrow(DatabaseHelper.COL_PRATO_FOTO)
                 lista.add(
                     Prato(
                         id = it.getInt(it.getColumnIndexOrThrow(DatabaseHelper.COL_PRATO_ID)),
@@ -29,7 +31,9 @@ class PratoRepository(private val helper: DatabaseHelper) {
                         descricao = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COL_PRATO_DESCRICAO)) ?: "",
                         preco = it.getDouble(it.getColumnIndexOrThrow(DatabaseHelper.COL_PRATO_PRECO)),
                         categoria = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COL_PRATO_CATEGORIA)),
-                        emoji = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COL_PRATO_EMOJI)) ?: ""
+                        emoji = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COL_PRATO_EMOJI)) ?: "",
+                        // getBlob lê os bytes da foto; se a coluna estiver vazia (NULL), o prato fica sem foto
+                        foto = if (it.isNull(fotoIndex)) null else it.getBlob(fotoIndex)
                     )
                 )
             }
@@ -63,6 +67,7 @@ class PratoRepository(private val helper: DatabaseHelper) {
         values.put(DatabaseHelper.COL_PRATO_PRECO, prato.preco)
         values.put(DatabaseHelper.COL_PRATO_CATEGORIA, prato.categoria)
         values.put(DatabaseHelper.COL_PRATO_EMOJI, prato.emoji)
+        values.put(DatabaseHelper.COL_PRATO_FOTO, prato.foto) // ByteArray vira BLOB
         return values
     }
 }

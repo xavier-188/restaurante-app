@@ -1,10 +1,11 @@
-package com.example.restauranteapp.repository
+package com.example.restauranteapp.data.dao
 
 import android.content.ContentValues
 import com.example.restauranteapp.data.local.DatabaseHelper
 import com.example.restauranteapp.data.model.Reserva
 
-class ReservaRepository(private val helper: DatabaseHelper) {
+// DAO (Data Access Object): concentra todo o SQL da tabela "reservas" (CRUD)
+class ReservaDao(private val helper: DatabaseHelper) {
 
     fun inserir(reserva: Reserva): Long {
         return helper.writableDatabase.insert(

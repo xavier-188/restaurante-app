@@ -3,32 +3,35 @@ package com.example.restauranteapp.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.restauranteapp.ui.screens.AvaliacoesScreen
 import com.example.restauranteapp.ui.screens.CadastroScreen
 import com.example.restauranteapp.ui.screens.CardapioScreen
 import com.example.restauranteapp.ui.screens.ConfigScreen
 import com.example.restauranteapp.ui.screens.HomeScreen
 import com.example.restauranteapp.ui.screens.LoginScreen
+import com.example.restauranteapp.ui.screens.MesasScreen
 import com.example.restauranteapp.ui.screens.SobreScreen
 import com.example.restauranteapp.ui.screens.TelaReservas
 import com.example.restauranteapp.ui.viewmodel.AuthViewModel
-import com.example.restauranteapp.ui.viewmodel.PratoViewModel
-import com.example.restauranteapp.ui.viewmodel.ReservaViewModel
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    authViewModel: AuthViewModel,
-    pratoViewModel: PratoViewModel,
-    reservaViewModel: ReservaViewModel,
     modifier: Modifier = Modifier
 ) {
+    // Criado aqui, fora das rotas, para ser UM só para o app inteiro:
+    // login, cadastro, reservas, avaliações e config enxergam o mesmo usuário logado.
+    // Os outros ViewModels são criados dentro de cada tela com viewModel().
+    val authViewModel: AuthViewModel = viewModel()
+
     // Decidido uma única vez, ao abrir o app: se já existe sessão salva, pula o login.
     // O remember evita que o destino inicial mude depois que o usuário fizer login.
-    val telaInicial = remember {
-        if (authViewModel.usuarioLogado != null) Routes.HOME else Routes.LOGIN
+    val telaInicial: Any = remember {
+        if (authViewModel.usuarioLogado != null) Routes.Home else Routes.Login
     }
 
     NavHost(
@@ -36,52 +39,62 @@ fun AppNavHost(
         startDestination = telaInicial,
         modifier = modifier
     ) {
-        composable(Routes.LOGIN) {
+        composable<Routes.Login> {
             LoginScreen(
                 authViewModel = authViewModel,
                 onLoginSuccess = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    navController.navigate(Routes.Home) {
+                        popUpTo(Routes.Login) { inclusive = true }
                     }
                 },
-                onNavigateToCadastro = { navController.navigate(Routes.CADASTRO) }
+                onNavigateToCadastro = { navController.navigate(Routes.Cadastro) }
             )
         }
 
-        composable(Routes.CADASTRO) {
+        composable<Routes.Cadastro> {
             CadastroScreen(
                 authViewModel = authViewModel,
                 onCadastroSuccess = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    navController.navigate(Routes.Home) {
+                        popUpTo(Routes.Login) { inclusive = true }
                     }
                 },
                 onNavigateToLogin = { navController.popBackStack() }
             )
         }
 
-        composable(Routes.HOME) { HomeScreen() }
+        composable<Routes.Home> { HomeScreen() }
 
-        composable(Routes.CARDAPIO) { CardapioScreen(pratoViewModel = pratoViewModel) }
+        composable<Routes.Cardapio> { CardapioScreen() }
 
-        composable(Routes.RESERVAS) {
+        composable<Routes.Reservas> {
             TelaReservas(
-                reservaViewModel = reservaViewModel,
                 usuarioId = authViewModel.usuarioLogado?.id ?: 0
             )
         }
 
-        composable(Routes.SOBRE) { SobreScreen() }
+        composable<Routes.Avaliacoes> {
+            AvaliacoesScreen(
+                nomeUsuario = authViewModel.usuarioLogado?.nome ?: "",
+                usuarioId = authViewModel.usuarioLogado?.id
+            )
+        }
 
-        composable(Routes.CONFIG) {
+        composable<Routes.Mesas> { MesasScreen() }
+
+        composable<Routes.Sobre> { SobreScreen() }
+
+        composable<Routes.Config> {
             ConfigScreen(
                 nome = authViewModel.usuarioLogado?.nome ?: "",
                 email = authViewModel.usuarioLogado?.email ?: "",
+                onAbrirMesas = { navController.navigate(Routes.Mesas) },
+                onAbrirSobre = { navController.navigate(Routes.Sobre) },
                 onLogout = {
                     authViewModel.logout()
                     // Limpa toda a pilha (a Home é sempre a base) e volta para o login
-                    navController.navigate(Routes.LOGIN) {
-                        popUpTo(Routes.HOME) { inclusive = true }
+                    navController.navigate(Routes.Login) {
+                        popUpTo(Routes.Home) { inclusive = true }
                     }
                 }
             )

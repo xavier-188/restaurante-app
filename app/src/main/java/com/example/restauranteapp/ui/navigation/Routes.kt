@@ -1,11 +1,34 @@
 package com.example.restauranteapp.ui.navigation
 
+import kotlinx.serialization.Serializable
+
+// Rotas serializadas: cada tela é um objeto marcado com @Serializable.
+// O NavHost usa a própria classe como rota (composable<Routes.Home>), sem strings soltas.
 object Routes {
-    const val LOGIN = "login"
-    const val CADASTRO = "cadastro"
-    const val HOME = "home"
-    const val CARDAPIO = "cardapio"
-    const val RESERVAS = "reservas"
-    const val SOBRE = "sobre"
-    const val CONFIG = "config"
+    @Serializable
+    object Login
+
+    @Serializable
+    object Cadastro
+
+    @Serializable
+    object Home
+
+    @Serializable
+    object Cardapio
+
+    @Serializable
+    object Reservas
+
+    @Serializable
+    object Mesas
+
+    @Serializable
+    object Avaliacoes
+
+    @Serializable
+    object Sobre
+
+    @Serializable
+    object Config
 }

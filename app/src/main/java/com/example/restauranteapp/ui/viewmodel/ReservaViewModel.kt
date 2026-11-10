@@ -3,11 +3,16 @@ package com.example.restauranteapp.ui.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import com.example.restauranteapp.data.model.Reserva
-import com.example.restauranteapp.repository.ReservaRepository
+import com.example.restauranteapp.data.dao.ReservaDao
+import com.example.restauranteapp.data.local.DatabaseHelper
 
-class ReservaViewModel(private val repository: ReservaRepository) : ViewModel() {
+// AndroidViewModel recebe o application, usado para abrir o banco e criar o DAO (igual ao exemplo da aula)
+class ReservaViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val dao = ReservaDao(DatabaseHelper(application))
 
     var reservas by mutableStateOf(emptyList<Reserva>())
         private set
@@ -18,7 +23,7 @@ class ReservaViewModel(private val repository: ReservaRepository) : ViewModel() 
     // A tela chama isto dentro de um LaunchedEffect, passando o usuário logado
     fun carregar(usuarioId: Int) {
         this.usuarioId = usuarioId
-        reservas = repository.listar(usuarioId)
+        reservas = dao.listar(usuarioId)
     }
 
     // Retorna a mensagem de erro, ou null se salvou com sucesso.
@@ -53,16 +58,16 @@ class ReservaViewModel(private val repository: ReservaRepository) : ViewModel() 
         )
 
         if (id == null) {
-            repository.inserir(reserva)
+            dao.inserir(reserva)
         } else {
-            repository.atualizar(reserva)
+            dao.atualizar(reserva)
         }
         carregar(dono)
         return null
     }
 
     fun excluir(id: Int) {
-        repository.excluir(id)
+        dao.excluir(id)
         usuarioId?.let { carregar(it) }
     }
 }

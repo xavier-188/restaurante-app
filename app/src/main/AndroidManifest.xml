@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Necessária para o Retrofit acessar a API -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Recurso nativo: câmera para fotografar os pratos (não obrigatória para instalar o app) -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

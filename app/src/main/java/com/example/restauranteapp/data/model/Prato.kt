@@ -6,5 +6,6 @@ data class Prato(
     val descricao: String,
     val preco: Double,
     val categoria: String,
-    val emoji: String
+    val emoji: String,
+    val foto: ByteArray? = null // foto em bytes (BLOB do banco); null = sem foto
 )

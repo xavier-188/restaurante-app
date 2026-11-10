@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,6 +23,8 @@ import com.example.restauranteapp.ui.theme.Terracotta
 fun ConfigScreen(
     nome: String,
     email: String,
+    onAbrirMesas: () -> Unit,
+    onAbrirSobre: () -> Unit,
     onLogout: () -> Unit
 ) {
     Scaffold(
@@ -49,6 +52,16 @@ fun ConfigScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Text("RESTAURANTE", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
+            OutlinedButton(onClick = onAbrirMesas, modifier = Modifier.fillMaxWidth()) {
+                Text("🪑  Gerenciar mesas", color = Terracotta)
+            }
+            OutlinedButton(onClick = onAbrirSobre, modifier = Modifier.fillMaxWidth()) {
+                Text("ℹ️  Sobre o restaurante", color = Terracotta)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Button(
                 onClick = onLogout,
                 colors = ButtonDefaults.buttonColors(containerColor = Terracotta),
@@ -66,6 +79,12 @@ fun ConfigScreen(
 @Composable
 fun ConfigScreenPreview() {
     RestauranteAppTheme {
-        ConfigScreen(nome = "Maria Silva", email = "maria@email.com", onLogout = {})
+        ConfigScreen(
+            nome = "Maria Silva",
+            email = "maria@email.com",
+            onAbrirMesas = {},
+            onAbrirSobre = {},
+            onLogout = {}
+        )
     }
 }

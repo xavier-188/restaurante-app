@@ -1,5 +1,9 @@
 package com.example.restauranteapp.ui.screens
 
+import android.graphics.Bitmap
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,11 +17,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.restauranteapp.data.ImagemConversor
 import com.example.restauranteapp.data.model.Prato
 import com.example.restauranteapp.ui.theme.CoralLight
 import com.example.restauranteapp.ui.theme.RestauranteAppTheme
@@ -30,7 +40,7 @@ private val categoriasForm = categoriasFiltro.drop(1)
 
 // Parte "conectada": fala com o ViewModel
 @Composable
-fun CardapioScreen(pratoViewModel: PratoViewModel) {
+fun CardapioScreen(pratoViewModel: PratoViewModel = viewModel()) {
     // Carrega os pratos do banco quando a tela abre
     LaunchedEffect(Unit) {
         pratoViewModel.carregar()
@@ -38,8 +48,8 @@ fun CardapioScreen(pratoViewModel: PratoViewModel) {
 
     CardapioContent(
         pratos = pratoViewModel.pratos,
-        onSalvar = { id, nome, descricao, preco, categoria, emoji ->
-            pratoViewModel.salvar(id, nome, descricao, preco, categoria, emoji)
+        onSalvar = { id, nome, descricao, preco, categoria, emoji, fotoNova ->
+            pratoViewModel.salvar(id, nome, descricao, preco, categoria, emoji, fotoNova)
         },
         onExcluir = { id -> pratoViewModel.excluir(id) }
     )
@@ -49,7 +59,7 @@ fun CardapioScreen(pratoViewModel: PratoViewModel) {
 @Composable
 fun CardapioContent(
     pratos: List<Prato>,
-    onSalvar: (Int?, String, String, String, String, String) -> String?,
+    onSalvar: (Int?, String, String, String, String, String, Bitmap?) -> String?,
     onExcluir: (Int) -> Unit
 ) {
     var categoriaFiltro by remember { mutableStateOf("Todos") }
@@ -64,6 +74,18 @@ fun CardapioContent(
     var emoji by remember { mutableStateOf("") }
     var erro by remember { mutableStateOf<String?>(null) }
 
+    // Foto: a que o prato já tem (bytes do banco) e a que acabou de ser tirada (ainda não salva)
+    var fotoAtual by remember { mutableStateOf<ByteArray?>(null) }
+    var fotoNova by remember { mutableStateOf<Bitmap?>(null) }
+
+    // Recurso nativo: abre a câmera do celular e devolve a foto como Bitmap
+    // (TakePicturePreview não precisa de permissão nem de FileProvider)
+    val cameraLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicturePreview()
+    ) { bitmap ->
+        if (bitmap != null) fotoNova = bitmap // null = usuário cancelou
+    }
+
     fun fecharFormulario() {
         mostrarForm = false
         editandoId = null
@@ -73,6 +95,8 @@ fun CardapioContent(
         categoria = "Pratos"
         emoji = ""
         erro = null
+        fotoAtual = null
+        fotoNova = null
     }
 
     val filtrados = if (categoriaFiltro == "Todos") {
@@ -175,6 +199,29 @@ fun CardapioContent(
                             )
                         }
 
+                        Text("FOTO", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            // Mostra a foto nova, se tirou; senão a que o prato já tinha
+                            val preview = fotoNova?.asImageBitmap() ?: carregarFoto(fotoAtual)
+                            if (preview != null) {
+                                Image(
+                                    bitmap = preview,
+                                    contentDescription = "Foto do prato",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(72.dp)
+                                        .clip(RoundedCornerShape(12.dp))
+                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+                            }
+                            OutlinedButton(onClick = { cameraLauncher.launch(null) }) {
+                                Text(
+                                    if (preview == null) "📷 Tirar foto" else "📷 Tirar outra",
+                                    color = Terracotta
+                                )
+                            }
+                        }
+
                         Text("CATEGORIA", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
                         Row(
                             modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -195,7 +242,7 @@ fun CardapioContent(
 
                         Button(
                             onClick = {
-                                val resultado = onSalvar(editandoId, nome, descricao, preco, categoria, emoji)
+                                val resultado = onSalvar(editandoId, nome, descricao, preco, categoria, emoji, fotoNova)
                                 if (resultado == null) {
                                     fecharFormulario()
                                 } else {
@@ -233,6 +280,8 @@ fun CardapioContent(
                         preco = "%.2f".format(prato.preco).replace('.', ',')
                         categoria = prato.categoria
                         emoji = prato.emoji
+                        fotoAtual = prato.foto
+                        fotoNova = null
                         editandoId = prato.id
                         erro = null
                         mostrarForm = true
@@ -279,12 +328,25 @@ private fun PratoItem(
             .border(1.dp, Color.LightGray, RoundedCornerShape(16.dp))
             .padding(14.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .background(Color(0xFFF7E7DF), RoundedCornerShape(14.dp))
-                .padding(16.dp)
-        ) {
-            Text(prato.emoji, fontSize = 28.sp)
+        // Lê o arquivo só quando o caminho muda (remember), não a cada recomposição
+        val foto = remember(prato.foto) { carregarFoto(prato.foto) }
+        if (foto != null) {
+            Image(
+                bitmap = foto,
+                contentDescription = prato.nome,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(68.dp)
+                    .clip(RoundedCornerShape(14.dp))
+            )
+        } else {
+            Column(
+                modifier = Modifier
+                    .background(Color(0xFFF7E7DF), RoundedCornerShape(14.dp))
+                    .padding(16.dp)
+            ) {
+                Text(prato.emoji, fontSize = 28.sp)
+            }
         }
 
         Spacer(modifier = Modifier.width(12.dp))
@@ -312,6 +374,12 @@ private fun PratoItem(
     }
 }
 
+// Converte os bytes da foto (BLOB do banco) em imagem para o Compose (ou null se não tem foto)
+private fun carregarFoto(foto: ByteArray?): ImageBitmap? {
+    if (foto == null) return null
+    return ImagemConversor.paraBitmap(foto)?.asImageBitmap()
+}
+
 @Preview(showBackground = true)
 @Composable
 fun CardapioScreenPreview() {
@@ -321,7 +389,7 @@ fun CardapioScreenPreview() {
                 Prato(1, "Filé à Parmegiana", "Filé empanado, molho de tomate e queijo gratinado.", 52.0, "Pratos", "🥩"),
                 Prato(2, "Pudim da Casa", "Pudim cremoso com calda de caramelo.", 18.0, "Sobremesas", "🍮")
             ),
-            onSalvar = { _, _, _, _, _, _ -> null },
+            onSalvar = { _, _, _, _, _, _, _ -> null },
             onExcluir = {}
         )
     }

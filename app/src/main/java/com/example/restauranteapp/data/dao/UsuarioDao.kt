@@ -1,11 +1,12 @@
-package com.example.restauranteapp.repository
+package com.example.restauranteapp.data.dao
 
 import android.content.ContentValues
 import com.example.restauranteapp.data.local.DatabaseHelper
 import com.example.restauranteapp.data.model.Usuario
 import android.database.Cursor
 
-class UsuarioRepository(private val helper: DatabaseHelper) {
+// DAO (Data Access Object): concentra o SQL das tabelas "usuarios" e "sessao" (cadastro, login e sessão)
+class UsuarioDao(private val helper: DatabaseHelper) {
 
     fun inserir(usuario: Usuario): Long {
         val values = ContentValues()
