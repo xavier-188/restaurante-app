@@ -33,7 +33,7 @@ fun MainApp() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    // Menu escondido no login e no cadastro (e no primeiro instante, enquanto o destino ainda é null)
+    // Menu escondido no login e no cadastro
     val showMenu = currentDestination != null &&
             !currentDestination.hasRoute(Routes.Login::class) &&
             !currentDestination.hasRoute(Routes.Cadastro::class)

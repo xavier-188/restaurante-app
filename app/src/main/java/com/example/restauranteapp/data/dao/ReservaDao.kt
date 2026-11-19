@@ -4,7 +4,6 @@ import android.content.ContentValues
 import com.example.restauranteapp.data.local.DatabaseHelper
 import com.example.restauranteapp.data.model.Reserva
 
-// DAO (Data Access Object): concentra todo o SQL da tabela "reservas" (CRUD)
 class ReservaDao(private val helper: DatabaseHelper) {
 
     fun inserir(reserva: Reserva): Long {
@@ -13,7 +12,7 @@ class ReservaDao(private val helper: DatabaseHelper) {
         )
     }
 
-    // Lista só as reservas do usuário logado (mais recentes primeiro)
+
     fun listar(usuarioId: Int): List<Reserva> {
         val lista = mutableListOf<Reserva>()
         val cursor = helper.readableDatabase.query(

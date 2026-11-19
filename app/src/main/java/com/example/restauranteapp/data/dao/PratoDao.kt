@@ -4,17 +4,17 @@ import android.content.ContentValues
 import com.example.restauranteapp.data.local.DatabaseHelper
 import com.example.restauranteapp.data.model.Prato
 
-// DAO (Data Access Object): concentra todo o SQL da tabela "pratos" (CRUD)
+
 class PratoDao(private val helper: DatabaseHelper) {
 
-    // CREATE
+
     fun inserir(prato: Prato): Long {
         return helper.writableDatabase.insert(
             DatabaseHelper.TABELA_PRATOS, null, paraValores(prato)
         )
     }
 
-    // READ
+
     fun listar(): List<Prato> {
         val lista = mutableListOf<Prato>()
         val cursor = helper.readableDatabase.query(
@@ -41,7 +41,7 @@ class PratoDao(private val helper: DatabaseHelper) {
         return lista
     }
 
-    // UPDATE
+
     fun atualizar(prato: Prato): Int {
         return helper.writableDatabase.update(
             DatabaseHelper.TABELA_PRATOS,
@@ -51,7 +51,6 @@ class PratoDao(private val helper: DatabaseHelper) {
         )
     }
 
-    // DELETE
     fun excluir(id: Int): Int {
         return helper.writableDatabase.delete(
             DatabaseHelper.TABELA_PRATOS,

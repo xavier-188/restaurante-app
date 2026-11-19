@@ -23,13 +23,10 @@ fun AppNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    // Criado aqui, fora das rotas, para ser UM só para o app inteiro:
-    // login, cadastro, reservas, avaliações e config enxergam o mesmo usuário logado.
-    // Os outros ViewModels são criados dentro de cada tela com viewModel().
+
     val authViewModel: AuthViewModel = viewModel()
 
-    // Decidido uma única vez, ao abrir o app: se já existe sessão salva, pula o login.
-    // O remember evita que o destino inicial mude depois que o usuário fizer login.
+
     val telaInicial: Any = remember {
         if (authViewModel.usuarioLogado != null) Routes.Home else Routes.Login
     }

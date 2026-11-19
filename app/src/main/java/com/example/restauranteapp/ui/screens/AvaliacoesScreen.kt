@@ -23,14 +23,14 @@ import com.example.restauranteapp.ui.theme.RestauranteAppTheme
 import com.example.restauranteapp.ui.theme.Terracotta
 import com.example.restauranteapp.ui.viewmodel.AvaliacaoViewModel
 
-// Parte "conectada": fala com o ViewModel
+
 @Composable
 fun AvaliacoesScreen(
     nomeUsuario: String,
     usuarioId: Int?,
     avaliacaoViewModel: AvaliacaoViewModel = viewModel()
 ) {
-    // Carrega as avaliações do banco quando a tela abre
+
     LaunchedEffect(Unit) {
         avaliacaoViewModel.carregar()
     }
@@ -45,7 +45,7 @@ fun AvaliacoesScreen(
     )
 }
 
-// Parte "visual": só recebe dados e callbacks (por isso funciona no Preview)
+
 @Composable
 fun AvaliacoesContent(
     avaliacoes: List<Avaliacao>,

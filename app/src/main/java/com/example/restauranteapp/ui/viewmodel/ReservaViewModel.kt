@@ -9,7 +9,7 @@ import com.example.restauranteapp.data.model.Reserva
 import com.example.restauranteapp.data.dao.ReservaDao
 import com.example.restauranteapp.data.local.DatabaseHelper
 
-// AndroidViewModel recebe o application, usado para abrir o banco e criar o DAO (igual ao exemplo da aula)
+
 class ReservaViewModel(application: Application) : AndroidViewModel(application) {
 
     private val dao = ReservaDao(DatabaseHelper(application))
@@ -17,16 +17,16 @@ class ReservaViewModel(application: Application) : AndroidViewModel(application)
     var reservas by mutableStateOf(emptyList<Reserva>())
         private set
 
-    // Guarda de quem são as reservas que estão na tela
+
     private var usuarioId: Int? = null
 
-    // A tela chama isto dentro de um LaunchedEffect, passando o usuário logado
+
     fun carregar(usuarioId: Int) {
         this.usuarioId = usuarioId
         reservas = dao.listar(usuarioId)
     }
 
-    // Retorna a mensagem de erro, ou null se salvou com sucesso.
+
     fun salvar(
         id: Int?,
         nome: String,

@@ -5,7 +5,7 @@ import com.example.restauranteapp.data.local.DatabaseHelper
 import com.example.restauranteapp.data.model.Usuario
 import android.database.Cursor
 
-// DAO (Data Access Object): concentra o SQL das tabelas "usuarios" e "sessao" (cadastro, login e sessão)
+
 class UsuarioDao(private val helper: DatabaseHelper) {
 
     fun inserir(usuario: Usuario): Long {

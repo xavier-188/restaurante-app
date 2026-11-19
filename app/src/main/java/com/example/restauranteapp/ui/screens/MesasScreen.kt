@@ -30,7 +30,7 @@ private val areasMesa = listOf("Salão", "Varanda", "Área externa", "Reservado"
 // Parte "conectada": fala com o ViewModel
 @Composable
 fun MesasScreen(mesaViewModel: MesaViewModel = viewModel()) {
-    // Carrega as mesas do banco quando a tela abre
+
     LaunchedEffect(Unit) {
         mesaViewModel.carregar()
     }
@@ -42,7 +42,7 @@ fun MesasScreen(mesaViewModel: MesaViewModel = viewModel()) {
     )
 }
 
-// Parte "visual": só recebe dados e callbacks (por isso funciona no Preview)
+
 @Composable
 fun MesasContent(
     mesas: List<Mesa>,
@@ -87,7 +87,7 @@ fun MesasContent(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Formulário de criar / editar
+
             item {
                 Column(
                     modifier = Modifier

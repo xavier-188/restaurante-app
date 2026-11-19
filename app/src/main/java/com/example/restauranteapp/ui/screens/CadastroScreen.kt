@@ -26,7 +26,7 @@ fun CadastroScreen(
         authViewModel.limparErro()
     }
 
-    // O cadastro já deixa o usuário logado: quando isso acontece, vai para a Home
+
     LaunchedEffect(authViewModel.usuarioLogado) {
         if (authViewModel.usuarioLogado != null) {
             onCadastroSuccess()

@@ -11,7 +11,6 @@ import com.example.restauranteapp.data.model.Prato
 import com.example.restauranteapp.data.dao.PratoDao
 import com.example.restauranteapp.data.local.DatabaseHelper
 
-// AndroidViewModel recebe o application, usado para abrir o banco e criar o DAO (igual ao exemplo da aula)
 class PratoViewModel(application: Application) : AndroidViewModel(application) {
 
     private val dao = PratoDao(DatabaseHelper(application))
@@ -23,8 +22,7 @@ class PratoViewModel(application: Application) : AndroidViewModel(application) {
         pratos = dao.listar()
     }
 
-    // Retorna a mensagem de erro, ou null se salvou com sucesso.
-    // id == null -> cadastra um prato novo; id != null -> atualiza o existente.
+
     fun salvar(
         id: Int?,
         nome: String,
@@ -32,7 +30,7 @@ class PratoViewModel(application: Application) : AndroidViewModel(application) {
         preco: String,
         categoria: String,
         emoji: String,
-        fotoNova: Bitmap? // foto tirada agora com a câmera (null = manter a que já tinha)
+        fotoNova: Bitmap? // foto tirada agora com a câmera
     ): String? {
         val valor = preco.trim().replace(",", ".").toDoubleOrNull()
         if (nome.isBlank() || categoria.isBlank()) {
@@ -42,7 +40,7 @@ class PratoViewModel(application: Application) : AndroidViewModel(application) {
             return "Informe um preço válido (ex: 25,90)."
         }
 
-        // Se tirou foto nova, converte para bytes (BLOB); senão mantém a foto que o prato já tinha
+
         val foto = if (fotoNova != null) {
             ImagemConversor.paraBlob(fotoNova)
         } else {

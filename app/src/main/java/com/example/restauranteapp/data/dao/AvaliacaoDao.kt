@@ -14,7 +14,7 @@ class AvaliacaoDao(private val helper: DatabaseHelper) {
         )
     }
 
-    // READ (todas as avaliações, mais recentes primeiro)
+
     fun listar(): List<Avaliacao> {
         val lista = mutableListOf<Avaliacao>()
         val cursor = helper.readableDatabase.query(
@@ -38,7 +38,7 @@ class AvaliacaoDao(private val helper: DatabaseHelper) {
         return lista
     }
 
-    // UPDATE
+
     fun atualizar(avaliacao: Avaliacao): Int {
         return helper.writableDatabase.update(
             DatabaseHelper.TABELA_AVALIACOES,
@@ -48,7 +48,7 @@ class AvaliacaoDao(private val helper: DatabaseHelper) {
         )
     }
 
-    // DELETE
+
     fun excluir(id: Int): Int {
         return helper.writableDatabase.delete(
             DatabaseHelper.TABELA_AVALIACOES,

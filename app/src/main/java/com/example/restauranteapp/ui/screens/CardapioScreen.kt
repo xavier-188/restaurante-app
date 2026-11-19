@@ -34,14 +34,14 @@ import com.example.restauranteapp.ui.theme.RestauranteAppTheme
 import com.example.restauranteapp.ui.theme.Terracotta
 import com.example.restauranteapp.ui.viewmodel.PratoViewModel
 
-// Categorias para filtrar a lista (com "Todos") e para escolher no formulário (sem "Todos")
+
 private val categoriasFiltro = listOf("Todos", "Entradas", "Pratos", "Lanches", "Sobremesas", "Bebidas")
 private val categoriasForm = categoriasFiltro.drop(1)
 
-// Parte "conectada": fala com o ViewModel
+
 @Composable
 fun CardapioScreen(pratoViewModel: PratoViewModel = viewModel()) {
-    // Carrega os pratos do banco quando a tela abre
+
     LaunchedEffect(Unit) {
         pratoViewModel.carregar()
     }
@@ -55,7 +55,7 @@ fun CardapioScreen(pratoViewModel: PratoViewModel = viewModel()) {
     )
 }
 
-// Parte "visual": só recebe dados e callbacks (por isso funciona no Preview)
+
 @Composable
 fun CardapioContent(
     pratos: List<Prato>,
@@ -64,7 +64,7 @@ fun CardapioContent(
 ) {
     var categoriaFiltro by remember { mutableStateOf("Todos") }
 
-    // Estado do formulário de prato
+
     var mostrarForm by remember { mutableStateOf(false) }
     var editandoId by remember { mutableStateOf<Int?>(null) }
     var nome by remember { mutableStateOf("") }
@@ -74,12 +74,10 @@ fun CardapioContent(
     var emoji by remember { mutableStateOf("") }
     var erro by remember { mutableStateOf<String?>(null) }
 
-    // Foto: a que o prato já tem (bytes do banco) e a que acabou de ser tirada (ainda não salva)
     var fotoAtual by remember { mutableStateOf<ByteArray?>(null) }
     var fotoNova by remember { mutableStateOf<Bitmap?>(null) }
 
-    // Recurso nativo: abre a câmera do celular e devolve a foto como Bitmap
-    // (TakePicturePreview não precisa de permissão nem de FileProvider)
+    // Recurso nativo:
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
@@ -328,7 +326,7 @@ private fun PratoItem(
             .border(1.dp, Color.LightGray, RoundedCornerShape(16.dp))
             .padding(14.dp)
     ) {
-        // Lê o arquivo só quando o caminho muda (remember), não a cada recomposição
+
         val foto = remember(prato.foto) { carregarFoto(prato.foto) }
         if (foto != null) {
             Image(
@@ -374,7 +372,7 @@ private fun PratoItem(
     }
 }
 
-// Converte os bytes da foto (BLOB do banco) em imagem para o Compose (ou null se não tem foto)
+
 private fun carregarFoto(foto: ByteArray?): ImageBitmap? {
     if (foto == null) return null
     return ImagemConversor.paraBitmap(foto)?.asImageBitmap()

@@ -13,7 +13,7 @@ fun BottomMenu(
     navController: NavHostController,
     currentDestination: NavDestination?
 ) {
-    // Navega para uma aba sem empilhar cópias: volta até a Home e abre a rota (uma só vez)
+
     fun irPara(rota: Any) {
         navController.navigate(rota) {
             popUpTo(Routes.Home)
@@ -21,7 +21,7 @@ fun BottomMenu(
         }
     }
 
-    // Mesas e Sobre são abertas pela aba "Mais", então ela fica marcada nessas telas também
+    // Mesas e Sobre são abertas pela aba "Mais"
     val emMais = currentDestination?.hasRoute(Routes.Config::class) == true ||
             currentDestination?.hasRoute(Routes.Mesas::class) == true ||
             currentDestination?.hasRoute(Routes.Sobre::class) == true

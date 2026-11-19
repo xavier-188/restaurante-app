@@ -9,7 +9,7 @@ import com.example.restauranteapp.data.model.Mesa
 import com.example.restauranteapp.data.dao.MesaDao
 import com.example.restauranteapp.data.local.DatabaseHelper
 
-// AndroidViewModel recebe o application, usado para abrir o banco e criar o DAO (igual ao exemplo da aula)
+
 class MesaViewModel(application: Application) : AndroidViewModel(application) {
 
     private val dao = MesaDao(DatabaseHelper(application))
@@ -21,8 +21,6 @@ class MesaViewModel(application: Application) : AndroidViewModel(application) {
         mesas = dao.listar()
     }
 
-    // Retorna a mensagem de erro, ou null se salvou com sucesso.
-    // id == null -> cadastra uma mesa nova; id != null -> atualiza a existente.
     fun salvar(id: Int?, numero: String, lugares: String, area: String): String? {
         val numeroMesa = numero.trim().toIntOrNull()
         val quantidade = lugares.trim().toIntOrNull()

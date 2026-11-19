@@ -27,7 +27,7 @@ fun TelaReservas(
     usuarioId: Int,
     reservaViewModel: ReservaViewModel = viewModel()
 ) {
-    // Carrega as reservas do usuário quando a tela abre (e de novo se o usuário mudar)
+
     LaunchedEffect(usuarioId) {
         reservaViewModel.carregar(usuarioId)
     }
@@ -41,14 +41,14 @@ fun TelaReservas(
     )
 }
 
-// Parte "visual": só recebe dados e callbacks (por isso funciona no Preview)
+
 @Composable
 fun ReservasContent(
     reservas: List<Reserva>,
     onSalvar: (Int?, String, String, String, String, String, String) -> String?,
     onExcluir: (Int) -> Unit
 ) {
-    // Variáveis de estado do formulário
+
     var nome by remember { mutableStateOf("") }
     var telefone by remember { mutableStateOf("") }
     var data by remember { mutableStateOf("") }
@@ -56,7 +56,7 @@ fun ReservasContent(
     var pessoas by remember { mutableStateOf("2") }
     var observacoes by remember { mutableStateOf("") }
 
-    // null = criando uma reserva nova; um número = editando a reserva com esse id
+
     var editandoId by remember { mutableStateOf<Int?>(null) }
     var erro by remember { mutableStateOf<String?>(null) }
 
@@ -88,7 +88,7 @@ fun ReservasContent(
             }
         }
     ) { innerPadding ->
-        // LazyColumn: o formulário é o primeiro item e as reservas vêm logo abaixo
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -125,7 +125,7 @@ fun ReservasContent(
                         )
                     }
 
-                    // Data e Horário lado a lado
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -241,7 +241,6 @@ fun ReservasContent(
                         erro = null
                     },
                     onExcluir = {
-                        // Se estava editando justamente essa reserva, limpa o formulário
                         if (editandoId == reserva.id) limparFormulario()
                         onExcluir(reserva.id)
                     }

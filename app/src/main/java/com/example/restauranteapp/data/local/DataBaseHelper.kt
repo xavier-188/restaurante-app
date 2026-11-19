@@ -19,7 +19,7 @@ class DatabaseHelper(context: Context) :
         const val COL_USUARIO_EMAIL = "email"
         const val COL_USUARIO_SENHA = "senha"
 
-        // Tabela sessao (guarda quem está logado; sempre a linha id = 1)
+        // Tabela sessao
         const val TABELA_SESSAO = "sessao"
         const val COL_SESSAO_ID = "id"
         const val COL_SESSAO_USUARIO_ID = "usuario_id"
@@ -32,7 +32,7 @@ class DatabaseHelper(context: Context) :
         const val COL_PRATO_PRECO = "preco"
         const val COL_PRATO_CATEGORIA = "categoria"
         const val COL_PRATO_EMOJI = "emoji"
-        const val COL_PRATO_FOTO = "foto" // foto tirada com a câmera, guardada como BLOB
+        const val COL_PRATO_FOTO = "foto"
 
         // Tabela reservas
         const val TABELA_RESERVAS = "reservas"
@@ -61,7 +61,6 @@ class DatabaseHelper(context: Context) :
         const val COL_AVALIACAO_USUARIO_ID = "usuario_id"
     }
 
-    // Chamado pelo Android uma única vez, quando o banco ainda não existe
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """
@@ -139,7 +138,7 @@ class DatabaseHelper(context: Context) :
         inserirMesa(db, 2, 4, "Salão")
         inserirMesa(db, 3, 6, "Varanda")
 
-        // Dados iniciais, só para a lista do cardápio não começar vazia (pode remover)
+
         inserirPrato(db, "Filé à Parmegiana", "Filé empanado, molho de tomate, queijo gratinado e arroz com fritas.", 52.0, "Pratos", "🥩")
         inserirPrato(db, "Risoto de Camarão", "Arroz arbóreo cremoso com camarões salteados e ervas frescas.", 68.0, "Pratos", "🍤")
         inserirPrato(db, "Frango Grelhado", "Peito de frango grelhado, ervas finas e limão siciliano.", 44.0, "Pratos", "🍗")
@@ -148,7 +147,7 @@ class DatabaseHelper(context: Context) :
         inserirPrato(db, "Pudim da Casa", "Pudim cremoso de leite condensado com calda de caramelo.", 18.0, "Sobremesas", "🍮")
     }
 
-    // Chamado quando DATABASE_VERSION aumenta: apaga tudo e recria (simples, mas perde os dados)
+
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS $TABELA_AVALIACOES")
         db.execSQL("DROP TABLE IF EXISTS $TABELA_MESAS")
@@ -159,7 +158,7 @@ class DatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    // Usa o "db" recebido no onCreate, nunca writableDatabase (causaria erro dentro do onCreate)
+
     private fun inserirPrato(
         db: SQLiteDatabase,
         nome: String,

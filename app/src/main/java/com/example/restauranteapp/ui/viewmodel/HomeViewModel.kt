@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
 
-    // Serviço do Retrofit (igual ao ViaCepApi.service do exemplo da aula)
+    // Serviço do Retrofit
     private val api = RetrofitClient.receitaApi
 
     var sugestao by mutableStateOf<Receita?>(null)
@@ -23,8 +23,6 @@ class HomeViewModel : ViewModel() {
     var erro by mutableStateOf<String?>(null)
         private set
 
-    // Chamada de rede não pode rodar na thread principal: viewModelScope.launch
-    // abre uma coroutine e o Retrofit (função suspend) faz a requisição em segundo plano.
     fun carregarSugestao() {
         viewModelScope.launch {
             carregando = true

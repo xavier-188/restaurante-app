@@ -20,12 +20,12 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
 
-    // Ao abrir a tela, apaga qualquer erro que tenha sobrado de outra tela
+
     LaunchedEffect(Unit) {
         authViewModel.limparErro()
     }
 
-    // Roda de novo sempre que usuarioLogado mudar: se virou um usuário, entra no app
+
     LaunchedEffect(authViewModel.usuarioLogado) {
         if (authViewModel.usuarioLogado != null) {
             onLoginSuccess()
@@ -62,7 +62,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Mensagem de erro vinda do ViewModel (só aparece quando existe)
+
         authViewModel.erro?.let { mensagem ->
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = mensagem, color = Color.Red)

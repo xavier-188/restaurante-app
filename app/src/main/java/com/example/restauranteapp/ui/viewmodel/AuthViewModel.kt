@@ -10,7 +10,7 @@ import com.example.restauranteapp.data.dao.UsuarioDao
 import com.example.restauranteapp.data.local.DatabaseHelper
 import java.security.MessageDigest
 
-// AndroidViewModel recebe o application, usado para abrir o banco e criar o DAO (igual ao exemplo da aula)
+
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val dao = UsuarioDao(DatabaseHelper(application))

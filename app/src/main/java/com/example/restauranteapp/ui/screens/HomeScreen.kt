@@ -28,7 +28,7 @@ import com.example.restauranteapp.ui.viewmodel.HomeViewModel
 // Parte "conectada": fala com o ViewModel
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
-    // Busca a sugestão do chef na API (Retrofit) quando a tela abre, só se ainda não tiver uma
+
     LaunchedEffect(Unit) {
         if (homeViewModel.sugestao == null) {
             homeViewModel.carregarSugestao()
@@ -43,7 +43,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
     )
 }
 
-// Parte "visual": só recebe dados e callbacks (por isso funciona no Preview)
+
 @Composable
 fun HomeContent(
     sugestao: Receita?,
@@ -125,7 +125,7 @@ fun DishItem(nome: String, descricao: String, preco: String) {
         Text(preco, color = Terracotta, fontWeight = FontWeight.Bold, fontSize = 14.sp)
     }
 }
-// Card com a receita vinda da API TheMealDB via Retrofit
+
 @Composable
 fun SugestaoDoChef(
     sugestao: Receita?,

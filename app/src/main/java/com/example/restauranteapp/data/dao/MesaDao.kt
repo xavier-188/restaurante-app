@@ -4,17 +4,17 @@ import android.content.ContentValues
 import com.example.restauranteapp.data.local.DatabaseHelper
 import com.example.restauranteapp.data.model.Mesa
 
-// DAO (Data Access Object): concentra todo o SQL da tabela "mesas" (CRUD)
+
 class MesaDao(private val helper: DatabaseHelper) {
 
-    // CREATE
+
     fun inserir(mesa: Mesa): Long {
         return helper.writableDatabase.insert(
             DatabaseHelper.TABELA_MESAS, null, paraValores(mesa)
         )
     }
 
-    // READ (ordenado pelo número da mesa)
+
     fun listar(): List<Mesa> {
         val lista = mutableListOf<Mesa>()
         val cursor = helper.readableDatabase.query(
@@ -36,7 +36,7 @@ class MesaDao(private val helper: DatabaseHelper) {
         return lista
     }
 
-    // UPDATE
+
     fun atualizar(mesa: Mesa): Int {
         return helper.writableDatabase.update(
             DatabaseHelper.TABELA_MESAS,
@@ -46,7 +46,7 @@ class MesaDao(private val helper: DatabaseHelper) {
         )
     }
 
-    // DELETE
+
     fun excluir(id: Int): Int {
         return helper.writableDatabase.delete(
             DatabaseHelper.TABELA_MESAS,

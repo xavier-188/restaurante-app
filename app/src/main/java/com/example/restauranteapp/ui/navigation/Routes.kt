@@ -2,8 +2,7 @@ package com.example.restauranteapp.ui.navigation
 
 import kotlinx.serialization.Serializable
 
-// Rotas serializadas: cada tela é um objeto marcado com @Serializable.
-// O NavHost usa a própria classe como rota (composable<Routes.Home>), sem strings soltas.
+// Rotas serializadas
 object Routes {
     @Serializable
     object Login

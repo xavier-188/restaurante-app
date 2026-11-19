@@ -17,8 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.example.restauranteapp.ui.theme.RestauranteAppTheme
 import com.example.restauranteapp.ui.theme.Terracotta
 
-// Tela "sem estado": recebe os dados prontos e avisa quando o botão é clicado.
-// Assim ela também funciona no Preview, sem precisar de ViewModel.
+
 @Composable
 fun ConfigScreen(
     nome: String,
